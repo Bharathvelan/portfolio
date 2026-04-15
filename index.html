@@ -6,6 +6,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bharath Velan S | Portfolio</title>
 
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Bharath Velan S - Data Engineer, AI/ML Developer & Web Innovator. Showcasing advanced projects in Data Pipelines, Deep Learning, and Python.">
+    <meta name="keywords" content="Data Engineer, AI Developer, Machine Learning, Python, FastAPI, JavaScript, Portfolio">
+    <meta name="author" content="Bharath Velan S">
+    
+    <!-- OpenGraph SEO for Social Media Previews -->
+    <meta property="og:title" content="Bharath Velan S | Data Engineer & AI Portfolio">
+    <meta property="og:description" content="Data Engineer, AI/ML Developer & Web Innovator. Showcasing advanced projects in Data Pipelines, Deep Learning, and Python.">
+    <meta property="og:image" content="https://bharathvelan.github.io/portfolio/og-image.png">
+    <meta property="og:url" content="https://bharathvelan.github.io/portfolio/">
+    <meta property="og:type" content="website">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Bharath Velan S | Data Engineer & AI Portfolio">
+    <meta name="twitter:description" content="Data Engineer, AI/ML Developer & Web Innovator. Showcasing advanced projects in Data Pipelines, Deep Learning, and Python.">
+    <meta name="twitter:image" content="https://bharathvelan.github.io/portfolio/og-image.png">
+
+    <!-- PWA Settings -->
+    <meta name="theme-color" content="#050A14">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="og-image.png">
+
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -2158,6 +2181,17 @@
                 window.history.replaceState({}, document.title, window.location.pathname + '#contact');
             }
         })();
+
+        // ===================== PWA SERVICE WORKER REGISTRATION =====================
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js').then(registration => {
+                    console.log('SW registered: ', registration);
+                }).catch(registrationError => {
+                    console.log('SW registration failed: ', registrationError);
+                });
+            });
+        }
 
     </script>
 </body>
