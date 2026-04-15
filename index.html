@@ -140,6 +140,23 @@
             position: fixed; right: 0px; top: 0; width: 4px; height: 100vh;
             background: rgba(255,255,255,0.02); z-index: 10000; pointer-events: none;
         }
+
+        /* Easter Egg Terminal */
+        #easter-terminal {
+            position: fixed; inset: 0; background: rgba(0,10,0,0.95); z-index: 999999;
+            display: flex; align-items: center; justify-content: center; flex-direction: column;
+            opacity: 0; pointer-events: none; transition: opacity 0.5s;
+            font-family: var(--font-code); color: #00FF41; text-align: left;
+        }
+        #easter-terminal.hacked { opacity: 1; pointer-events: auto; }
+        .terminal-content { width: 80%; max-width: 600px; text-shadow: 0 0 10px #00FF41; }
+        .term-line { font-size: 1.2rem; margin-bottom: 20px; border-right: 2px solid transparent; white-space: nowrap; overflow: hidden; width: 0; }
+        #close-terminal { background: none; border: 1px solid #00FF41; color: #00FF41; padding: 10px 20px; font-family: var(--font-code); cursor: none; margin-top: 30px; transition: all 0.2s; }
+        #close-terminal:hover { background: rgba(0,255,65,0.2); box-shadow: 0 0 15px #00FF41; }
+        
+        @keyframes typeTerm { from { width: 0; } to { width: 100%; } }
+        @keyframes blinkTerm { 50% { border-color: transparent; } 100% { border-color: #00FF41; } }
+        }
         #orbital-node {
             position: absolute; right: 0px; top: 0; width: 6px; height: 60px;
             background: var(--primary); border-radius: 6px;
@@ -1343,8 +1360,19 @@
         }
     </style>
 </head>
-
 <body>
+
+    <!-- Hidden Terminal Easter Egg -->
+    <div id="easter-terminal">
+        <div class="terminal-content">
+            <div class="term-line">> INITIALIZING SYSTEM BACKDOOR...</div>
+            <div class="term-line">> ACCESS GRANTED: BHARATH VELAN S</div>
+            <div class="term-line">> DOWNLOADING AI/ML ARCHIVES... [OK]</div>
+            <div class="term-line">> WARNING: APEX LAYER BREACHED.</div>
+            <div class="term-line">> PORTFOLIO_MODE: GOD_MODE_ACTIVE</div>
+            <button id="close-terminal">SHUT DOWN</button>
+        </div>
+    </div>
 
     <!-- Preloader -->
     <div id="preloader">
@@ -2013,6 +2041,10 @@
         window.addEventListener('resize', resizeCanvas);
         resizeCanvas();
 
+        let isMouseDown = false;
+        window.addEventListener('mousedown', () => isMouseDown = true);
+        window.addEventListener('mouseup', () => isMouseDown = false);
+
         class Particle {
             constructor() { this.reset(); }
             reset() {
@@ -2028,15 +2060,26 @@
                 this.color = Math.random() > 0.85 ? '124, 58, 237' : '0, 240, 255';
             }
             update() {
-                this.baseX += this.speedX;
-                this.baseY += this.speedY;
-                if (this.baseX < 0) this.baseX = width;
-                if (this.baseX > width) this.baseX = 0;
-                if (this.baseY < 0) this.baseY = height;
-                if (this.baseY > height) this.baseY = 0;
-                // Parallax shift based on mouse
-                this.x = this.baseX + mouseParallaxX * this.depth * 12;
-                this.y = this.baseY + mouseParallaxY * this.depth * 12;
+                if (isMouseDown) {
+                    // Black Hole Singularity Physics
+                    const dx = mouseX - this.x;
+                    const dy = mouseY - this.y;
+                    this.x += dx * 0.05;
+                    this.y += dy * 0.05;
+                } else {
+                    // Normal drift with spring back to base coordinates
+                    const dx = this.baseX + mouseParallaxX * this.depth * 12 - this.x;
+                    const dy = this.baseY + mouseParallaxY * this.depth * 12 - this.y;
+                    this.x += dx * 0.08;
+                    this.y += dy * 0.08;
+                    
+                    this.baseX += this.speedX;
+                    this.baseY += this.speedY;
+                    if (this.baseX < 0) this.baseX = width;
+                    if (this.baseX > width) this.baseX = 0;
+                    if (this.baseY < 0) this.baseY = height;
+                    if (this.baseY > height) this.baseY = 0;
+                }
             }
             draw() {
                 ctx.fillStyle = `rgba(${this.color}, ${this.opacity})`;
@@ -2057,6 +2100,24 @@
             grad.addColorStop(1, '#020408');
             ctx.fillStyle = grad;
             ctx.fillRect(0, 0, width, height);
+
+            // Neural Network Constellation Lines
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    if (distance < 120) {
+                        ctx.beginPath();
+                        ctx.strokeStyle = `rgba(0, 240, 255, ${0.15 - distance / 800})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+            
             particles.forEach(p => { p.update(); p.draw(); });
             requestAnimationFrame(animateParticles);
         }
@@ -2084,6 +2145,24 @@
         const chars = document.querySelectorAll('#hero-name-target .char');
         chars.forEach((char, idx) => {
             char.style.transitionDelay = `${idx * 0.05}s`;
+            // Kinetic Text Repulsion
+            char.addEventListener('mousemove', (e) => {
+                const rect = char.getBoundingClientRect();
+                const dx = e.clientX - (rect.left + rect.width / 2);
+                const dy = e.clientY - (rect.top + rect.height / 2);
+                const dist = Math.sqrt(dx*dx + dy*dy);
+                if(dist < 80) {
+                    char.style.transform = `translate(${-dx * 0.8}px, ${-dy * 0.8}px) scale(1.2) rotate(${dx*0.5}deg)`;
+                    char.style.color = 'var(--primary)';
+                    char.style.transition = 'all 0.1s ease-out';
+                    if(typeof playTone === 'function') playTone(800 + dist*10, 'sine', 0.02);
+                }
+            });
+            char.addEventListener('mouseleave', () => {
+                char.style.transform = 'translate(0, 0) scale(1) rotate(0deg)';
+                char.style.color = 'var(--text-pri)';
+                char.style.transition = 'opacity 0.8s, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1)';
+            });
         });
 
         // ===================== VELOCITY MARQUEE & ORBITAL SCROLL =====================
@@ -2189,6 +2268,29 @@
                 });
             });
         }
+
+        // ===================== TERMINAL EASTER EGG =====================
+        let keyBuffer = '';
+        const easterTerminal = document.getElementById('easter-terminal');
+        const termLines = document.querySelectorAll('.term-line');
+        
+        window.addEventListener('keydown', (e) => {
+            keyBuffer += e.key.toUpperCase();
+            if (keyBuffer.length > 4) keyBuffer = keyBuffer.slice(-4);
+            if (keyBuffer === 'DATA') triggerHack();
+        });
+
+        function triggerHack() {
+            easterTerminal.classList.add('hacked');
+            if(typeof playTone === 'function') playTone(150, 'sawtooth', 1.0);
+            termLines.forEach((line, i) => {
+                line.style.animation = `typeTerm 1s steps(40) ${i * 1.2}s forwards, blinkTerm 0.5s step-end infinite alternate`;
+            });
+        }
+        document.getElementById('close-terminal').addEventListener('click', () => {
+            easterTerminal.classList.remove('hacked');
+            termLines.forEach(line => line.style.animation = 'none');
+        });
 
     </script>
 </body>
